@@ -73,8 +73,6 @@ model Server {
 
   expiresAt DateTime?
 
-  status ServerStatus @default(PENDING)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
