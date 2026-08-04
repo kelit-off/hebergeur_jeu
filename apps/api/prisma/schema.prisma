@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  stripeCustomerId String?  @unique
+
+  servers   Server[]
+  invoices  Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Game {
+  id String @id @default(cuid())
+  slug String @unique
+  name String
+  eggId String
+  
+  ramMinGo    Int
+  cpuMinCores Int
+  diskMinGo   Int
+
+  isActive Boolean @default(true)
+
+  prix_unitaire_ram Int
+  prix_unitaire_cpu Int
+  prix_unitaire_disk Int
+
+  servers Server[]
+
+  createdAt DateTime @default(now())
+}
+
+enum ServerStatus {
+  PENDING
+  RUNNING
+  SUSPENDED
+  DELETED
+}
+
+model Server {
+  id String @id @default(cuid())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  game Game @relation(fields: [gameId], references: [id])
+  gameId String
+
+  name String
+  status ServerStatus @default(PENDING)
+
+  ramGo Int
+  cpuCores Int
+  diskGo Int
+
+  isFree Boolean @default(false)
+  prixMensuel Int
+
+  expiresAt DateTime?
+
+  status ServerStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id              String   @id @default(cuid())
+
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+
+  stripeInvoiceId String   @unique
+  montant         Float
+  statut          String   // paid, open, failed...
+
+  createdAt       DateTime @default(now())
+}
