@@ -16,20 +16,41 @@ model User {
   email     String   @unique
   password  String
   stripeCustomerId String?  @unique
+  pterodactylUserId Int?    @unique
 
   servers   Server[]
   invoices  Invoice[]
+  resetTokens PasswordResetToken[]
+  tickets   SupportTicket[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  tokenHash String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+
+  createdAt DateTime @default(now())
 }
 
 model Game {
   id String @id @default(cuid())
   slug String @unique
   name String
-  eggId String
-  
+  eggId Int
+  nestId Int
+  nodeId Int
+  dockerImage String
+  startup String
+  environment Json
+
   ramMinGo    Int
   cpuMinCores Int
   diskMinGo   Int
@@ -39,6 +60,8 @@ model Game {
   prix_unitaire_ram Int
   prix_unitaire_cpu Int
   prix_unitaire_disk Int
+
+  stripePriceId String? @unique
 
   servers Server[]
 
@@ -71,6 +94,10 @@ model Server {
   isFree Boolean @default(false)
   prixMensuel Int
 
+  pterodactylServerId    Int?
+  pterodactylIdentifier  String?
+  stripeSubscriptionId   String? @unique
+
   expiresAt DateTime?
 
   createdAt DateTime @default(now())
@@ -84,8 +111,41 @@ model Invoice {
   userId          String
 
   stripeInvoiceId String   @unique
+  stripeSubscriptionId String?
   montant         Float
   statut          String   // paid, open, failed...
 
   createdAt       DateTime @default(now())
+}
+
+enum TicketStatus {
+  OPEN
+  CLOSED
+}
+
+model SupportTicket {
+  id String @id @default(cuid())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  subject String
+  status  TicketStatus @default(OPEN)
+
+  messages SupportMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SupportMessage {
+  id String @id @default(cuid())
+
+  ticket   SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticketId String
+
+  body      String
+  fromAdmin Boolean @default(false)
+
+  createdAt DateTime @default(now())
 }

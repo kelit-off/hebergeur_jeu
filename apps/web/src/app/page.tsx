@@ -1,69 +1,228 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getGames } from "@/lib/games";
 
-export default function Home() {
+const BOOT_LINES = [
+  { text: "$ provision --game minecraft-java", tone: "muted" as const },
+  { text: "✓ compte authentifié · jwt", tone: "teal" as const },
+  { text: "✓ paiement confirmé · stripe", tone: "teal" as const },
+  { text: "✓ serveur alloué · node-1 · alloc #482", tone: "teal" as const },
+  { text: "✓ egg minecraft-java déployé", tone: "teal" as const },
+  { text: "● mon-serveur — RUNNING", tone: "ember" as const },
+];
+
+const STEPS = [
+  {
+    n: "01",
+    title: "Choisis ton jeu",
+    body: "Minecraft, Valheim, Rust... chaque jeu a ses ressources minimales et son prix affiché clairement, sans surprise.",
+  },
+  {
+    n: "02",
+    title: "Paie ton abonnement",
+    body: "Paiement mensuel sécurisé par Stripe, directement dans la page — pas de redirection, pas de compte tiers à créer.",
+  },
+  {
+    n: "03",
+    title: "Ton serveur est en ligne",
+    body: "Dès la confirmation du paiement, le serveur est provisionné automatiquement sur notre infrastructure Pterodactyl.",
+  },
+];
+
+const FEATURES = [
+  {
+    title: "Provisioning automatique",
+    body: "Aucune intervention manuelle : le serveur est créé sur le panel dès que le paiement est confirmé.",
+  },
+  {
+    title: "Paiement sécurisé",
+    body: "Abonnement mensuel géré par Stripe, avec renouvellement et facturation automatiques.",
+  },
+  {
+    title: "Contrôle total",
+    body: "Démarre, redémarre ou arrête ton serveur depuis le dashboard, à tout moment.",
+  },
+  {
+    title: "Compte sécurisé",
+    body: "Authentification par cookie httpOnly — ton jeton de session n'est jamais exposé au JavaScript.",
+  },
+  {
+    title: "Support par ticket",
+    body: "Chaque ticket ouvert notifie notre équipe en temps réel sur Discord.",
+  },
+  {
+    title: "Renouvellement clair",
+    body: "Date d'expiration visible sur chaque serveur, sans reconduction surprise.",
+  },
+];
+
+export default async function Home() {
+  const games = await getGames();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="flex flex-1 flex-col bg-brand-bg text-brand-text">
+      {/* Hero */}
+      <section className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 lg:grid-cols-2 lg:py-32">
+        <div>
+          <p className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-brand-teal">
+            <span aria-hidden className="status-dot inline-block h-1.5 w-1.5 rounded-full bg-brand-teal" />
+            Provisioning automatique · Pterodactyl
           </p>
+          <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+            Ton serveur de jeu,
+            <br />
+            en ligne <span className="text-brand-ember">à la seconde</span> du
+            paiement.
+          </h1>
+          <p className="mt-6 max-w-md text-lg text-brand-muted">
+            Choisis un jeu, paie ton abonnement mensuel, et regarde ton
+            serveur se provisionner automatiquement — sans ticket, sans
+            attente.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              href="/games"
+              className="rounded-full bg-brand-ember px-6 py-3 font-semibold text-brand-bg hover:opacity-90"
+            >
+              Voir les jeux
+            </Link>
+            <Link
+              href="/register"
+              className="rounded-full border border-brand-border px-6 py-3 font-semibold text-brand-text hover:border-brand-muted"
+            >
+              Créer un compte
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Signature : le "boot log" de provisioning, tel qu'il se produit réellement */}
+        <div className="rounded-lg border border-brand-border bg-brand-surface p-6 font-mono text-sm shadow-2xl shadow-black/40">
+          <div className="mb-4 flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-brand-border" />
+            <span className="h-2.5 w-2.5 rounded-full bg-brand-border" />
+            <span className="h-2.5 w-2.5 rounded-full bg-brand-border" />
+          </div>
+          <div className="flex flex-col gap-2">
+            {BOOT_LINES.map((line, i) => (
+              <p
+                key={line.text}
+                className={`boot-line ${
+                  line.tone === "teal"
+                    ? "text-brand-teal"
+                    : line.tone === "ember"
+                      ? "text-brand-ember"
+                      : "text-brand-muted"
+                }`}
+                style={{ animationDelay: `${i * 0.35 + 0.2}s` }}
+              >
+                {line.text}
+              </p>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Comment ça marche */}
+      <section className="border-t border-brand-border">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <h2 className="mb-12 font-display text-2xl font-bold tracking-tight">
+            Comment ça marche
+          </h2>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+            {STEPS.map((step) => (
+              <div key={step.n}>
+                <p className="mb-3 font-mono text-sm text-brand-ember">
+                  {step.n}
+                </p>
+                <h3 className="mb-2 font-display font-bold">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-brand-muted">{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Catalogue */}
+      <section className="border-t border-brand-border">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-12 flex items-end justify-between">
+            <h2 className="font-display text-2xl font-bold tracking-tight">
+              Jeux disponibles
+            </h2>
+            <Link
+              href="/games"
+              className="font-mono text-xs uppercase tracking-wide text-brand-teal hover:underline"
+            >
+              Tout voir →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {games.slice(0, 3).map((game) => (
+              <Link
+                key={game.id}
+                href={`/games/${game.slug}/checkout`}
+                className="flex flex-col gap-3 rounded-lg border border-brand-border bg-brand-surface p-6 transition hover:border-brand-muted"
+              >
+                <p className="font-display font-bold">
+                  {game.name}
+                </p>
+                <p className="font-mono text-xs text-brand-muted">
+                  {game.ramMinGo}GB RAM · {game.cpuMinCores} VCPU ·{" "}
+                  {game.diskMinGo}GB DISK
+                </p>
+                <p className="mt-auto font-mono text-lg text-brand-ember">
+                  {game.monthlyPrice}€<span className="text-xs text-brand-muted">/mois</span>
+                </p>
+              </Link>
+            ))}
+            {games.length === 0 && (
+              <p className="text-sm text-brand-muted">
+                Aucun jeu disponible pour le moment.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Fonctionnalités */}
+      <section className="border-t border-brand-border">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <h2 className="mb-12 font-display text-2xl font-bold tracking-tight">
+            Fait pour durer
+          </h2>
+          <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map((feature) => (
+              <div key={feature.title}>
+                <h3 className="mb-2 font-display font-bold">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-brand-muted">{feature.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Support / CTA finale */}
+      <section className="border-t border-brand-border bg-brand-surface">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-6 py-20 sm:flex-row sm:items-center">
+          <div>
+            <h2 className="mb-2 font-display text-2xl font-bold tracking-tight">
+              Prêt à lancer ton serveur ?
+            </h2>
+            <p className="text-brand-muted">
+              Crée ton compte, choisis ton jeu, et joue en quelques minutes.
+            </p>
+          </div>
+          <Link
+            href="/register"
+            className="shrink-0 rounded-full bg-brand-ember px-6 py-3 font-semibold text-brand-bg hover:opacity-90"
+          >
+            Créer un compte
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
