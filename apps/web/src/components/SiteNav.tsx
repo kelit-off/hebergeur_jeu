@@ -61,9 +61,6 @@ export default function SiteNav({ current }: { current?: Key }) {
         <Link href="/panel" className="btn btn-secondary" style={css("text-decoration:none;font-size:13px;")}>
           Espace client
         </Link>
-        <Link href="/tarifs" className="btn btn-primary" style={css("text-decoration:none;font-size:13px;")}>
-          Commencer
-        </Link>
       </div>
     </nav>
   );
