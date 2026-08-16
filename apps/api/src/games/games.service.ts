@@ -7,7 +7,7 @@ export class GamesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    const games = await this.prisma.game.findManyOrThrow({
+    const games = await this.prisma.game.findMany({
       where: { isActive: true },
       orderBy: { name: 'asc' },
     });
