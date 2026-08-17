@@ -13,7 +13,23 @@ datasource db {
 
 model User {
   id        String   @id @default(cuid())
+
+  firstName String
+  lastName String
+
   email     String   @unique
+  phone String
+
+  adress String
+  adressComplement String
+  postalCode String
+  city String
+  region String
+  country String
+
+  company String?
+  tvaCode String?
+
   password  String
   stripeCustomerId String?  @unique
   pterodactylUserId Int?    @unique
