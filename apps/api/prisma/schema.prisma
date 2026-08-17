@@ -20,8 +20,8 @@ model User {
   email     String   @unique
   phone String
 
-  adress String
-  adressComplement String
+  address String
+  addressComplement String?
   postalCode String
   city String
   region String

@@ -20,11 +20,12 @@ export class RegisterDto {
 
   @ApiProperty()
   @IsString()
-  adress: string;
+  address : string;
 
   @ApiProperty()
   @IsString()
-  adressComplement: string;
+  @IsOptional()
+  addressComplement: string | null;
 
   @ApiProperty()
   @IsString()
@@ -45,15 +46,20 @@ export class RegisterDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  company: string;
+  company: string | null;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  tvaCode: string;
+  tvaCode: string | null;
 
   @ApiProperty()
   @IsString()
   @MinLength(8)
   password: string;
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(8)
+  confirmPassword: string;
 }
