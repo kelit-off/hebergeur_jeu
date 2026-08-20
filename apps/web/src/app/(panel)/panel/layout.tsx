@@ -26,14 +26,46 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
 			[text-wrap:pretty]
 		">
 			{/* TOP BAR */}
-			<header style={css("position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:20px;padding:12px clamp(16px,3vw,32px);backdrop-filter:blur(12px);background:color-mix(in srgb, var(--color-bg) 82%, transparent);border-bottom:1px solid var(--color-divider);")}>
-				<Link href="/" style={css("text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:600;font-size:18px;color:var(--color-text);letter-spacing:-.01em;")}>
-					<span style={css("display:inline-grid;place-items:center;width:25px;height:25px;border-radius:8px;background:radial-gradient(circle at 30% 25%, var(--color-accent-400), var(--color-accent-700));box-shadow:0 0 16px color-mix(in srgb, var(--color-accent) 55%, transparent);")}>
-						<span style={css("width:8px;height:8px;border-radius:50%;background:var(--color-accent-100);")} />
+			<header className="
+				sticky
+				top-0
+				z-50
+				flex
+				items-center
+				gap-5
+				py-3 px-[clamp(16px,3vw,32px)]
+				backdrop-blur-md
+				[background:color-mix(in srgb, var(--color-bg) 82%, transparent)]
+				border
+				border-[var(--color-divider)]
+			">
+			{/* style={css("position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:20px;padding:12px clamp(16px,3vw,32px);backdrop-filter:blur(12px);background:color-mix(in srgb, var(--color-bg) 82%, transparent);border-bottom:1px solid var(--color-divider);")}> */}
+				<Link href="/" className="
+					decoration-none
+					flex
+					items-center
+					gap-2.5
+					font-[var(--font-heading)]
+					font-semibold
+					text-lg
+					text-[var(--color-text)]
+					tracking-[-.01em]
+				">
+				{/* // style={css("text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:600;font-size:18px;color:var(--color-text);letter-spacing:-.01em;")}> */}
+					<span className="
+						inline-grid
+						place-items-center
+						w-6 h-6
+						rounded-
+						[background:radial-gradient(circle at 30% 25%, var(--color-accent-400), var(--color-accent-700))]
+						[box-shadow:0 0 16px color-mix(in srgb, var(--color-accent) 55%, transparent)]
+					">
+					{/* style={css("display:inline-grid;place-items:center;width:25px;height:25px;border-radius:8px;background:radial-gradient(circle at 30% 25%, var(--color-accent-400), var(--color-accent-700));box-shadow:0 0 16px color-mix(in srgb, var(--color-accent) 55%, transparent);")}> */}
+						<span className="w-2 h-2 rounded-[50%] [background:var(--color-accent-100)]" />
 					</span>
 					Zenith
 				</Link>
-				<span style={css("width:1px;height:22px;background:var(--color-divider);")} />
+				<span className="w-0.5 h-5 [background:var(--color-divider)]" />
 				<span style={css("font-size:13.5px;color:color-mix(in srgb, var(--color-text) 60%, transparent);")}>Espace client</span>
 				<div style={css("margin-left:auto;display:flex;align-items:center;gap:18px;")}>
 					<Link href="/" className="topback" style={css("text-decoration:none;font-size:13px;color:color-mix(in srgb, var(--color-text) 58%, transparent);display:flex;align-items:center;gap:6px;transition:color .15s;")}>
