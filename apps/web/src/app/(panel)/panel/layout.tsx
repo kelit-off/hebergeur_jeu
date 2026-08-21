@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { css } from "@/lib/css";
+import { getCurrentUser } from "@/lib/auth";
 
 const navItems: { label: string; icon: string; badge?: string; href: string }[] = [
 	{ label: "Vue d'ensemble", icon: "ph ph-squares-four", href: "/panel" },
@@ -12,8 +13,9 @@ const navItems: { label: string; icon: string; badge?: string; href: string }[] 
 	{ label: "Paramètres", icon: "ph ph-gear-six", href: "/panel/settings" },
 ];
 
-export default function PanelLayout({ children }: { children: React.ReactNode }) {
+export default async function PanelLayout({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
+	const user = await getCurrentUser()
 
 	return (
 		<div className="
@@ -66,44 +68,39 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
 					Zenith
 				</Link>
 				<span className="w-0.5 h-5 [background:var(--color-divider)]" />
-				<span style={css("font-size:13.5px;color:color-mix(in srgb, var(--color-text) 60%, transparent);")}>Espace client</span>
-				<div style={css("margin-left:auto;display:flex;align-items:center;gap:18px;")}>
-					<Link href="/" className="topback" style={css("text-decoration:none;font-size:13px;color:color-mix(in srgb, var(--color-text) 58%, transparent);display:flex;align-items:center;gap:6px;transition:color .15s;")}>
-						<i className="ph ph-arrow-left" style={css("font-size:15px;")} />
-						Retour au site
-					</Link>
-					<i className="ph ph-bell" style={css("font-size:18px;color:color-mix(in srgb, var(--color-text) 62%, transparent);")} />
-					<span style={css("display:flex;align-items:center;gap:9px;font-size:13px;")}>
-						<span style={css("width:30px;height:30px;border-radius:50%;background:var(--color-accent-800);display:grid;place-items:center;font-family:var(--font-heading);font-size:12.5px;color:var(--color-accent-200);")}>LM</span>
-						<span style={css("color:color-mix(in srgb, var(--color-text) 82%, transparent);")}>Lucas M.</span>
+				<span className="text-sm text-[color-mix(in srgb, var(--color-text) 60%, transparent)]">Espace client</span>
+				<div className="ml-auto flex items-center gap-5">
+					<i className="ph ph-bell text-lg text-[color-mix(in srgb, var(--color-text) 62%, transparent)]"/>
+					<span className="flex items-center gap-2 text-sm">
+						{/* <span style={css("width:30px;height:30px;border-radius:50%;background:var(--color-accent-800);display:grid;place-items:center;font-family:var(--font-heading);font-size:12.5px;color:var(--color-accent-200);")}>LM</span> */}
+						<span className="text-[color-mix(in srgb, var(--color-text) 82%, transparent)]">{user?.firstName} {user?.lastName}</span>
 					</span>
 				</div>
 			</header>
 
-			<div style={css("flex:1;display:flex;align-items:stretch;")}>
+			<div className="flex-1 flex items-stretch">
 				{/* SIDEBAR */}
-				<aside style={css("width:230px;flex:none;border-right:1px solid var(--color-divider);padding:20px 14px;display:flex;flex-direction:column;gap:4px;background:color-mix(in srgb, var(--color-surface) 30%, transparent);")}>
-					<p style={css("font-family:var(--font-heading);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 45%, transparent);margin:4px 10px 10px;")}>Mon compte</p>
+				<aside className="w-3xs flex-none border-r border-r-[var(--color-divider)] py-5 px-3.5 flex flex-col gap-1 [background:color-mix(in srgb, var(--color-surface) 30%, transparent)]">
+					<p className="font-[var(--font-heading)] text-xs tracking-widest uppercase text-[color-mix(in srgb, var(--color-text) 45%, transparent)] mt-1 mx-2.5 mb-2.5">Mon compte</p>
 					{navItems.map((n) => {
 						const on = n.href === "/panel" ? pathname === "/panel" : pathname.startsWith(n.href);
 						return (
 							<Link
 								key={n.href}
 								href={n.href}
-								className="navitem"
+								className="flex items-center gap-3 w-full font-[var(--font-body)] text-sm font-medium py-2.5 px-3 border-0 rounded-lg cursor-pointer [transition:background .15s, color .15s] box-border"
 								style={css(
-									"display:flex;align-items:center;gap:12px;width:100%;font-family:var(--font-body);font-size:14px;font-weight:500;padding:10px 12px;border:0;border-radius:9px;cursor:pointer;transition:background .15s, color .15s;text-decoration:none;box-sizing:border-box;" +
 									(on
 										? "background:color-mix(in srgb, var(--color-accent) 15%, transparent);color:var(--color-accent);"
 										: "background:transparent;color:color-mix(in srgb, var(--color-text) 66%, transparent);")
 								)}
 							>
-								<i className={n.icon} style={css("font-size:18px;flex:none;")} />
-								<span style={css("flex:1;text-align:left;")}>{n.label}</span>
+								<i className={n.icon+"text-lg flex-none"}/>
+								<span className="flex-1 text-left">{n.label}</span>
 								{n.badge && (
 									<span
+									className="text-xs font-[var(--font-heading)] rounded-[999px] py-0.5 px-2"
 										style={css(
-											"font-size:11px;font-family:var(--font-heading);border-radius:999px;padding:1px 8px;" +
 											(on
 												? "background:color-mix(in srgb, var(--color-accent) 22%, transparent);color:var(--color-accent-200);"
 												: "background:color-mix(in srgb, var(--color-text) 8%, transparent);color:color-mix(in srgb, var(--color-text) 58%, transparent);")
@@ -115,15 +112,15 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
 							</Link>
 						);
 					})}
-					<div style={css("margin-top:auto;border:1px solid color-mix(in srgb, var(--color-accent) 26%, transparent);border-radius:12px;background:color-mix(in srgb, var(--color-accent-900) 40%, transparent);padding:14px;")}>
-						<p style={css("font-family:var(--font-heading);font-weight:600;font-size:13.5px;margin:0;")}>Crédit de parrainage</p>
-						<p style={css("font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 68%, transparent);margin:6px 0 10px;")}>Invitez un ami, gagnez 5 € chacun.</p>
-						<button type="button" className="btn btn-secondary" style={css("font-size:12px;width:100%;box-sizing:border-box;text-align:center;")}>Partager mon lien</button>
+					<div className="mt-auto [border:1px solid color-mix(in srgb, var(--color-accent) 26%, transparent)] rounded-xl [background:color-mix(in srgb, var(--color-accent-900) 40%, transparent)] p-3.5">
+						<p className="font-[var(--font-heading)] font-semibold text-sm m-0" >Crédit de parrainage</p>
+						<p className="text-xs text-[color-mix(in srgb, var(--color-text) 68%, transparent)] mt-1.5 mx-0 mb-2.5">Invitez un ami, gagnez 5 € chacun.</p>
+						<button type="button" className="text-xs w-full box-border text-center">Partager mon lien</button>
 					</div>
 				</aside>
 
 				{/* MAIN */}
-				<main style={css("flex:1;min-width:0;padding:clamp(20px,3vw,36px);max-width:1080px;")}>
+				<main className="flex-1 min-w-0 [padding:clamp(20px,3vw,36px)] max-w-5xl">
 					{children}
 				</main>
 			</div>
